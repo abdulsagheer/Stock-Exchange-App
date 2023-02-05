@@ -1,13 +1,13 @@
 // Importing Libraries
-import express, { Application } from "express";
-import * as dotenv from "dotenv";
-import http from "http";
+import express, { Application } from 'express';
+import * as dotenv from 'dotenv';
+import http from 'http';
 
 // Importing dependencies
-import dbConnect from "./config/connectionDB";
-import Logging from "./utils/logging";
-import { config } from "./config/config";
-import contactRoute from "./routes/Contact.router";
+import dbConnect from './config/connectionDB';
+import Logging from './utils/logging';
+import { config } from './config/config';
+import contactRoute from './routes/Contact.router';
 
 dotenv.config();
 
@@ -26,7 +26,7 @@ const StartServer = () => {
 			`Incoming - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`
 		);
 
-		res.on("finish", () => {
+		res.on('finish', () => {
 			/** Log the res */
 			Logging.info(
 				`Result - METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}] - STATUS: [${res.statusCode}]`
@@ -41,17 +41,17 @@ const StartServer = () => {
 
 	/** Rules of our API */
 	app.use((req, res, next) => {
-		res.header("Access-Control-Allow-Origin", "*");
+		res.header('Access-Control-Allow-Origin', '*');
 		res.header(
-			"Access-Control-Allow-Headers",
-			"Origin, X-Requested-With, Content-Type, Accept, Authorization"
+			'Access-Control-Allow-Headers',
+			'Origin, X-Requested-With, Content-Type, Accept, Authorization'
 		);
-		res.header("Content-Type", "application/json");
+		res.header('Content-Type', 'application/json');
 
-		if (req.method == "OPTIONS") {
+		if (req.method == 'OPTIONS') {
 			res.header(
-				"Access-Control-Allow-Methods",
-				"PUT, POST, PATCH, DELETE, GET"
+				'Access-Control-Allow-Methods',
+				'PUT, POST, PATCH, DELETE, GET'
 			);
 			return res.status(200).json({});
 		}
@@ -60,16 +60,16 @@ const StartServer = () => {
 	});
 
 	/** Health Check */
-	app.get("/ping", (req, res, next) =>
-		res.status(200).json({ hello: "world" })
+	app.get('/ping', (req, res, next) =>
+		res.status(200).json({ hello: 'world' })
 	);
 
 	/** Contact Route */
-	app.use("/api/contact", contactRoute);
+	app.use('/api/contact', contactRoute);
 
 	/** Error handling */
 	app.use((req, res, next) => {
-		const error = new Error("Not found");
+		const error = new Error('Not found');
 
 		Logging.error(error);
 

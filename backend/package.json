@@ -21,6 +21,7 @@
 		"@types/jsonwebtoken": "^8.5.9",
 		"@types/lodash": "^4.14.191",
 		"@types/node": "^18.11.11",
+		"@types/node-cron": "^3.0.7",
 		"eslint": "^8.33.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-node": "^4.1.0",
@@ -47,6 +48,7 @@
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.21",
 		"mongoose": "^6.8.0",
+		"node-cron": "^3.0.2",
 		"zod": "^3.19.1"
 	}
 }
