@@ -28,7 +28,7 @@ export const createStock = expressAsyncHandler(
 			const stock = await newStock.save();
 
 			// Return the created stock
-			Api.ok(res, { stock }, Message.Created);
+			Api.created(res, { stock }, Message.Created);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}

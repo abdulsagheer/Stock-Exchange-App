@@ -22,7 +22,7 @@ export const userRegister = expressAsyncHandler(
 			// Register user
 			const { firstName, lastName, email, password } = req.body;
 			const user = await User.create({ firstName, lastName, email, password });
-			Api.ok(res, user, Message.CreateAccount);
+			Api.created(res, user, Message.CreateAccount);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}
