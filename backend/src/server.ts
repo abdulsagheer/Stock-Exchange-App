@@ -2,6 +2,7 @@
 import express, { Application } from 'express';
 import * as dotenv from 'dotenv';
 import http from 'http';
+import cors from 'cors';
 
 // Importing dependencies
 import dbConnect from './config/connectionDB';
@@ -11,13 +12,26 @@ import Api, { Message } from './utils/helper';
 import userRoute from './routes/user.route';
 import stockRoute from './routes/stock.route';
 
-dotenv.config();
 
+dotenv.config();
 /** DB configuration */
 dbConnect();
 
 /** Using Express Server */
 const app: Application = express();
+
+var whitelist = ['http://https:localhost:3000', 'http://https:localhost:5174'];
+var corsOptionsDelegate = function (req: any, callback: any) {
+	var corsOptions;
+	if (whitelist.indexOf(req.header('Origin')) !== -1) {
+		corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+	} else {
+		corsOptions = { origin: false }; // disable CORS for this request
+	}
+	callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+app.use(cors(corsOptionsDelegate));
 
 /**  Only Start Server if Mongoose Connects */
 const StartServer = () => {
