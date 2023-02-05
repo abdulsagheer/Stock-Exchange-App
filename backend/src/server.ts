@@ -7,8 +7,8 @@ import http from 'http';
 import dbConnect from './config/connectionDB';
 import Logging from './utils/logging';
 import { config } from './config/config';
-import contactRoute from './routes/Contact.router';
 import Api, { Message } from './utils/helper';
+import userRoute from './routes/user.route';
 
 dotenv.config();
 
@@ -66,7 +66,7 @@ const StartServer = () => {
 	);
 
 	/** Contact Route */
-	app.use('/api/contact', contactRoute);
+	app.use('/api/user', userRoute);
 
 	/** Error handling */
 	app.use((req, res, next) => {
@@ -74,10 +74,6 @@ const StartServer = () => {
 
 		Logging.error(error);
 		Api.notFound(req, res, Message.NotFound);
-		// sendError(res, String(error), 404);
-		// res.status(404).json({
-		// 	message: error.message,
-		// });
 	});
 
 	http
