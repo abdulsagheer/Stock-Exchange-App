@@ -2,13 +2,19 @@ import { changeLoadingState } from '../loading/slice';
 import { raiseToast } from '../toast/slice';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IAuthResponse, IAuthState } from '../../types/auth.types';
-import { api } from 'utils/api';
+import { api } from '../../services/Apis';
 import AuthUtils from '../../utils/auth.utils';
+import { RootState } from '../store';
 
 export type ISignupDetails = {
 	email: string;
-	username: string;
+	password: string;
+};
+
+export type ISigninDetails = {
+	email: string;
 	name: string;
+	password: string;
 };
 
 export const SERVER_URI = process.env.SERVER_URL;
@@ -28,7 +34,7 @@ const loaduser = createAsyncThunk(
 	async (_: void, { dispatch }) => {
 		try {
 			dispatch(changeLoadingState(true));
-			const data = await api.authorization.user.getAuthdetails();
+			const data = await api.user.getAuthdetails();
 			if (!data || !data?.accessToken) {
 				throw new Error('Something went wrong. Please try again later.');
 			}
@@ -55,42 +61,15 @@ const loaduser = createAsyncThunk(
 /**
  * @description - To login user
  */
-const login = createAsyncThunk('auth/login', async (_: void, { dispatch }) => {
-	try {
-		dispatch(changeLoadingState(true));
-
-		const data = await api.authorization.user.authLogin();
-
-		if (!data || !data?.accessToken) {
-			throw new Error('Something went wrong. Please try again later.');
-		}
-
-		dispatch(success(data));
-
-		dispatch(changeLoadingState(false));
-	} catch (err: any) {
-		const message = err?.response ? err.response.data.message : err.message;
-
-		dispatch(changeLoadingState(false));
-
-		dispatch(
-			raiseToast({
-				type: 'error',
-				message,
-			})
-		);
-	}
-});
-
-/**
- * @description - To register a new user
- */
-const register = createAsyncThunk(
+const login = createAsyncThunk(
 	'auth/login',
-	async (details: ISignupDetails, { dispatch }) => {
+	async (details: ISigninDetails, { dispatch }) => {
 		try {
 			dispatch(changeLoadingState(true));
-			const data = await api.authorization.user.authRegister(details);
+
+			const data = await api.user.login(details, {
+				'Access-Control-Allow-Origin': 'http://localhost:3000/',
+			});
 
 			if (!data || !data?.accessToken) {
 				throw new Error('Something went wrong. Please try again later.');
@@ -114,35 +93,27 @@ const register = createAsyncThunk(
 	}
 );
 
-const updateUserDetails = createAsyncThunk(
-	'auth/updateUserDetails',
-	async (
-		details: {
-			name?: string;
-			username?: string;
-			email?: string;
-			walletAddress: string;
-		},
-		{ dispatch }
-	) => {
+/**
+ * @description - To register a new user
+ */
+const register = createAsyncThunk(
+	'auth/login',
+	async (details: ISignupDetails, { dispatch }) => {
 		try {
 			dispatch(changeLoadingState(true));
+			const data = await api.user.register(details);
 
-			const _signed = await generateSignature(details.walletAddress);
-
-			if (_signed) {
-				await api.authorization.user.updateProfiledetails(details);
-				dispatch(
-					updateProfileSuccess({
-						...details,
-					})
-				);
-			} else {
-				throw new Error('Signature generation failed');
+			if (!data || !data?.accessToken) {
+				throw new Error('Something went wrong. Please try again later.');
 			}
+
+			dispatch(success(data));
+
+			dispatch(changeLoadingState(false));
 		} catch (err: any) {
-			console.log(err);
 			const message = err?.response ? err.response.data.message : err.message;
+
+			dispatch(changeLoadingState(false));
 
 			dispatch(
 				raiseToast({
@@ -151,7 +122,6 @@ const updateUserDetails = createAsyncThunk(
 				})
 			);
 		}
-		dispatch(changeLoadingState(false));
 	}
 );
 
@@ -189,7 +159,6 @@ const authSlice = createSlice({
 			state.access_token = payload.accessToken;
 			state.isAuthenticated = true;
 			state.user = payload.user;
-			state.walletBalance = payload.walletBalance;
 		},
 
 		/**
@@ -199,21 +168,11 @@ const authSlice = createSlice({
 			state,
 			{
 				payload,
-			}: { payload: { name?: string; email?: string; username?: string } }
+			}: { payload: { name?: string; email?: string; password?: string } }
 		) {
 			if (state.user) {
 				Object.assign(state.user, payload);
 			}
-		},
-
-		updateWalletBalance: (
-			state,
-			{ payload }: { payload: Partial<IAuthState['walletBalance']> }
-		) => {
-			state.walletBalance = {
-				...state.walletBalance,
-				...payload,
-			};
 		},
 
 		updateAuthState: (state, { payload }: { payload: Partial<IAuthState> }) => {
@@ -225,7 +184,7 @@ const authSlice = createSlice({
 const { error, logout, success, updateProfileSuccess, updateAuthState } =
 	authSlice.actions;
 
-export function getAuthState(state: IGlobalState): IAuthState {
+export function getAuthState(state: RootState): IAuthState {
 	return state.auth;
 }
 
@@ -238,7 +197,6 @@ export {
 	success,
 	updateAuthState,
 	updateProfileSuccess,
-	updateUserDetails,
 };
 
 export const authReducer = authSlice.reducer;
