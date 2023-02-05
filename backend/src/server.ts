@@ -8,7 +8,7 @@ import dbConnect from './config/connectionDB';
 import Logging from './utils/logging';
 import { config } from './config/config';
 import contactRoute from './routes/Contact.router';
-import sendError from './utils/helper';
+import Api, { Message } from './utils/helper';
 
 dotenv.config();
 
@@ -62,7 +62,7 @@ const StartServer = () => {
 
 	/** Health Check */
 	app.get('/ping', (req, res, next) =>
-		res.status(200).json({ hello: 'world' })
+		Api.ok(res, null, { hello: 'hello word' })
 	);
 
 	/** Contact Route */
@@ -73,7 +73,8 @@ const StartServer = () => {
 		const error = new Error('Not found');
 
 		Logging.error(error);
-		sendError(res, String(error), 404);
+		Api.notFound(req, res, Message.NotFound);
+		// sendError(res, String(error), 404);
 		// res.status(404).json({
 		// 	message: error.message,
 		// });
