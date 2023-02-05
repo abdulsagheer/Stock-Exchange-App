@@ -14,7 +14,7 @@ export const isAdmin = expressAsyncHandler(
 		try {
 			token = req.headers.authorization?.split(' ')[1];
 			if (!token) {
-				return res.status(401).send('Access denied. No token provided.');
+				return Api.unauthorized(req, res, Message.AccessDenied);
 			}
 			const decoded = jwt.verify(
 				token,
