@@ -55,7 +55,7 @@ export const getStockById = expressAsyncHandler(
 		try {
 			// Destructure the request params
 			const { id } = req.params;
-			validateMongodbID(id);
+			validateMongodbID(req, res, id);
 
 			// Retrieve the stock from the database
 			const stock = await Stock.findById(id);
@@ -73,7 +73,7 @@ export const updateStock = expressAsyncHandler(
 		try {
 			// Destructure the request params and body
 			const { id } = req.params;
-			validateMongodbID(id);
+			validateMongodbID(req, res, id);
 
 			const { name, symbol, marketCap, percentageDiluted, sharesIssued } =
 				req.body;
@@ -105,7 +105,7 @@ export const deleteStock = expressAsyncHandler(
 		try {
 			// Destructure the request params
 			const { id } = req.params;
-			validateMongodbID(id);
+			validateMongodbID(req, res, id);
 
 			// Delete the stock from the database
 			const deletedStocks = await Stock.findByIdAndDelete(id);
