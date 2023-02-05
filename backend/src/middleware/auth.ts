@@ -1,22 +1,38 @@
-import { Request, Response, NextFunction } from 'express';
+// Importing Libraries
+import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import expressAsyncHandler from 'express-async-handler';
 
-const authenticate = (req: Request, res: Response, next: NextFunction) => {
-	const bearerHeader = req.headers['authorization'];
+// Importing Dependencies
+import User from '../model/User.Model';
+import { JwtPayload } from '../interfaces/Jwt';
 
-	if (!bearerHeader) {
-		res.status(401).json({ error: 'Unauthorized, no token provided' });
-		return;
+// Function for Authenticating Middleware on routes so that logged in user can access routes.
+export const authMiddleware = expressAsyncHandler(
+	async (req: any, res: Response, next: NextFunction) => {
+		let token: string | null;
+		if (req?.headers?.authorization?.startsWith('Bearer')) {
+			try {
+				// It split a token into two i.e, Bearer 813774r238radoshaisdhf and takes the token
+				token = req.headers.authorization.split(' ')[1];
+				if (token) {
+					const decoded = jwt.verify(
+						token,
+						String(process.env.JWT_KEY)
+					) as JwtPayload;
+					// find the user by ID
+					const user = await User.findById(decoded?.id).select('-password');
+					// attach the user to the request object
+					req.user = user;
+					next();
+				} else {
+					throw new Error('There is no token attached to the header');
+				}
+			} catch (error) {
+				throw new Error('Not Authorized token expired, Login Again!!');
+			}
+		} else {
+			throw new Error('There is no token attached to the header');
+		}
 	}
-
-	const bearerToken = bearerHeader.split(' ')[1];
-	try {
-		const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET as string);
-		req.user = decoded;
-		next();
-	} catch (error) {
-		res.status(401).json({ error: 'Unauthorized, invalid token' });
-	}
-};
-
-export default authenticate;
+);
