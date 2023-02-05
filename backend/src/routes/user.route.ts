@@ -1,4 +1,3 @@
-import { NextFunction } from 'express';
 // Importing Libraries
 import express from 'express';
 
