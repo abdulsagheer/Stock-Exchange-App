@@ -1,8 +1,7 @@
 // Importing Libraries
-import * as dotenv from 'dotenv';
-dotenv.config();
 import { Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
+import bcrypt from 'bcryptjs';
 
 // Importing dependencies
 import User from '../model/User.Model';
@@ -23,7 +22,7 @@ export const userRegister = expressAsyncHandler(
 			// Register user
 			const { firstName, lastName, email, password } = req.body;
 			const user = await User.create({ firstName, lastName, email, password });
-			Api.created(res, user, Message.CreateAccount);
+			Api.ok(res, user, Message.CreateAccount);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}
@@ -33,22 +32,32 @@ export const userRegister = expressAsyncHandler(
 /** Login User */
 export const userLogin = expressAsyncHandler(
 	async (req: Request, res: Response) => {
-		const { email, password } = req.body;
-		// Check if user is already exists
-		const userFound = await User.findOne({ email });
-		// Check if password is matched
-		if (userFound && (await userFound.isPasswordMatched(password))) {
-			res.json({
-				_id: userFound?._id,
-				firstName: userFound?.firstName,
-				lastName: userFound?.lastName,
-				email: userFound?.email,
-				isAdmin: userFound?.isAdmin,
-				token: generateToken(userFound._id),
-			});
-		} else {
-			res.status(401);
-			throw new Error('Invalid Login Credentials');
+		try {
+			const { email, password } = req.body;
+			// Check if user is already exists
+			const userFound = await User.findOne({ email });
+			// Check if password is matched
+			if (userFound && bcrypt.compareSync(password, userFound.password)) {
+				Api.ok(
+					res,
+					{
+						_id: userFound?._id,
+						name: userFound?.name,
+						email: userFound?.email,
+						isAdmin: userFound?.isAdmin,
+						token: generateToken(String(userFound._id)),
+					},
+					Message.LoginSuccess
+				);
+			} else {
+				return Api.unauthorized(
+					res,
+					'Invalid Login Credentials',
+					Message.NotAuthorized
+				);
+			}
+		} catch (error: any) {
+			return Api.serverError(req, res, error, error.message);
 		}
 	}
 );
@@ -60,7 +69,7 @@ export const deleteUser = expressAsyncHandler(
 		validateMongodbID(id);
 		try {
 			const deletedUser = await User.findByIdAndDelete(id);
-			res.json(deletedUser);
+			Api.ok(res, deletedUser, Message.Delete);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}
@@ -75,7 +84,7 @@ export const fetchAllUsers = expressAsyncHandler(
 		// Fetch all users
 		try {
 			const users = await User.find({});
-			res.json(users);
+			Api.ok(res, users, Message.Fetched);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}
@@ -90,7 +99,7 @@ export const fetchUserDetails = expressAsyncHandler(
 		validateMongodbID(id);
 		try {
 			const user = await User.findById(id);
-			res.json(user);
+			Api.ok(res, user, Message.Fetched);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}
@@ -105,8 +114,8 @@ export const userProfile = expressAsyncHandler(
 		validateMongodbID(id);
 
 		try {
-			const profile = await User.findById(id).populate('posts');
-			res.json(profile);
+			const profile = await User.findById(id);
+			Api.ok(res, profile, Message.Fetched);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
 		}
