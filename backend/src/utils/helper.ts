@@ -5,3 +5,5 @@ const sendError = (res: Response, error: string, statusCode: number = 401) => {
 };
 
 export default sendError;
+
+
