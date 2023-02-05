@@ -8,6 +8,7 @@ import dbConnect from './config/connectionDB';
 import Logging from './utils/logging';
 import { config } from './config/config';
 import contactRoute from './routes/Contact.router';
+import sendError from './utils/helper';
 
 dotenv.config();
 
@@ -72,10 +73,10 @@ const StartServer = () => {
 		const error = new Error('Not found');
 
 		Logging.error(error);
-
-		res.status(404).json({
-			message: error.message,
-		});
+		sendError(res, String(error), 404);
+		// res.status(404).json({
+		// 	message: error.message,
+		// });
 	});
 
 	http
