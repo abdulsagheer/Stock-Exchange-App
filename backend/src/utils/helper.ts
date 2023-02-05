@@ -37,6 +37,7 @@ export const Message = {
 	AccessGiven: 'Access given successfully!',
 	Fetched: 'Fetched successfully!',
 	Created: 'Created Successfully!',
+	Delete: 'Deleted Successfully!',
 	NotFound: 'Not Found',
 	ImageNotFound: 'Image Not Found',
 	Found: 'Found Successfully',
