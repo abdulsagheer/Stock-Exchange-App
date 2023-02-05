@@ -12,7 +12,6 @@ import Api, { Message } from './utils/helper';
 import userRoute from './routes/user.route';
 import stockRoute from './routes/stock.route';
 
-
 dotenv.config();
 /** DB configuration */
 dbConnect();
