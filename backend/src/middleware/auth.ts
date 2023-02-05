@@ -6,10 +6,11 @@ import expressAsyncHandler from 'express-async-handler';
 // Importing Dependencies
 import User from '../model/User.Model';
 import { JwtPayload } from '../interfaces/Jwt';
+import Api, { Message } from '../utils/helper';
 
 // Function for Authenticating Middleware on routes so that logged in user can access routes.
 export const authMiddleware = expressAsyncHandler(
-	async (req: any, res: Response, next: NextFunction) => {
+	async (req: any, res: any, next: NextFunction) => {
 		let token: string | null;
 		if (req?.headers?.authorization?.startsWith('Bearer')) {
 			try {
@@ -26,13 +27,25 @@ export const authMiddleware = expressAsyncHandler(
 					req.user = user;
 					next();
 				} else {
-					throw new Error('There is no token attached to the header');
+					return Api.unauthorized(
+						req,
+						res,
+						'There is no token attached to the header'
+					);
 				}
 			} catch (error) {
-				throw new Error('Not Authorized token expired, Login Again!!');
+				return Api.unauthorized(
+					req,
+					res,
+					'There is no token attached to the header'
+				);
 			}
 		} else {
-			throw new Error('There is no token attached to the header');
+			return Api.unauthorized(
+				req,
+				res,
+				'There is no token attached to the header'
+			);
 		}
 	}
 );
