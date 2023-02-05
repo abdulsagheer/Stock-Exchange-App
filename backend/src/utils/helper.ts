@@ -22,6 +22,7 @@ const Status = {
 	PRROXY_ERROR: 502,
 	MAINTENANCE_MODE: 503,
 };
+
 export const Message = {
 	ValidationError: 'Validation error',
 	UserExist: 'User already exists',
@@ -91,11 +92,7 @@ const Api = {
 		});
 	},
 
-	badRequest(
-		res: Response,
-		errors: (string & any[]) | string[],
-		message: string
-	) {
+	badRequest(res: Response, errors: any, message: string) {
 		errors = Array.isArray(errors) ? errors : [errors];
 
 		const body = {
