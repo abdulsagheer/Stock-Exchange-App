@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 
-export const initiliseCron = () => {
+export const initialiseCron = () => {
 	/**
 	 * @description update newly order stocks
 	 *  interval every 12 hours
