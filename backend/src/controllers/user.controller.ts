@@ -20,8 +20,8 @@ export const userRegister = expressAsyncHandler(
 		}
 		try {
 			// Register user
-			const { firstName, lastName, email, password } = req.body;
-			const user = await User.create({ firstName, lastName, email, password });
+			const { name, email, password } = req.body;
+			const user = await User.create({ name, email, password });
 			Api.created(res, user, Message.CreateAccount);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, error.message);
@@ -66,7 +66,8 @@ export const userLogin = expressAsyncHandler(
 export const deleteUser = expressAsyncHandler(
 	async (req: Request, res: Response) => {
 		const { id } = req.params;
-		validateMongodbID(id);
+		validateMongodbID(req, res, id);
+
 		try {
 			const deletedUser = await User.findByIdAndDelete(id);
 			Api.ok(res, deletedUser, Message.Delete);
@@ -96,7 +97,8 @@ export const fetchUserDetails = expressAsyncHandler(
 	async (req: Request, res: Response) => {
 		// Fetch Single User Details By ID
 		const { id } = req.params;
-		validateMongodbID(id);
+		validateMongodbID(req, res, id);
+
 		try {
 			const user = await User.findById(id);
 			Api.ok(res, user, Message.Fetched);
@@ -111,7 +113,7 @@ export const userProfile = expressAsyncHandler(
 	async (req: Request, res: Response) => {
 		// User profile fetching
 		const { id } = req.params;
-		validateMongodbID(id);
+		validateMongodbID(req, res, id);
 
 		try {
 			const profile = await User.findById(id);
