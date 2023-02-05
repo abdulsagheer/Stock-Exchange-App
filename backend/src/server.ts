@@ -9,6 +9,7 @@ import Logging from './utils/logging';
 import { config } from './config/config';
 import Api, { Message } from './utils/helper';
 import userRoute from './routes/user.route';
+import stockRoute from './routes/stock.route';
 
 dotenv.config();
 
@@ -67,6 +68,7 @@ const StartServer = () => {
 
 	/** Contact Route */
 	app.use('/api/user', userRoute);
+	app.use('/api/stocks', stockRoute);
 
 	/** Error handling */
 	app.use((req, res, next) => {
