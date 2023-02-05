@@ -1,14 +1,14 @@
 // Importing Libraries
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 // Importing dependencies
-import { Order } from "../interfaces/Order";
+import { IOrder } from '../interfaces/Order';
 
 const orderSchema = new Schema({
 	type: {
 		type: String,
 		required: true,
-		enum: ["buy", "sell"],
+		enum: ['buy', 'sell'],
 	},
 	symbol: {
 		type: String,
@@ -27,8 +27,8 @@ const orderSchema = new Schema({
 	status: {
 		type: String,
 		required: true,
-		enum: ["open", "executed"],
+		enum: ['open', 'executed'],
 	},
 });
 
-export default mongoose.model<Order>("Order", orderSchema);
+export default mongoose.model<IOrder>('Order', orderSchema);

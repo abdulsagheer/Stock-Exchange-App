@@ -1,8 +1,8 @@
 // Importing Libraries
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 // Importing dependencies
-import { Company } from "../interfaces/Company";
+import { ICompany } from '../interfaces/Company';
 
 const companySchema = new Schema({
 	name: {
@@ -28,4 +28,4 @@ const companySchema = new Schema({
 	},
 });
 
-export default mongoose.model<Company>("Company", companySchema);
+export default mongoose.model<ICompany>('Company', companySchema);
