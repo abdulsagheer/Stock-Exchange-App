@@ -1,7 +1,11 @@
 import axios from 'axios';
-import { Axios } from '../interfaces/Axios.interface';
 
-export const AxiosRequest = async ({ methods, url, body, header }: Axios) => {
+export const AxiosRequest = async (
+	methods?: any,
+	url?: any,
+	body?: any,
+	header?: any
+) => {
 	const config = {
 		method: methods,
 		url,
