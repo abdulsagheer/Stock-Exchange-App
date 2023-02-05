@@ -1,4 +1,4 @@
-export interface Company {
+export interface ICompany {
 	name: string;
 	symbol: string;
 	marketCap: number;

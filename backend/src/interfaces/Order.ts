@@ -1,7 +1,7 @@
-export interface Order {
-	type: "buy" | "sell";
+export interface IOrder {
+	type: 'buy' | 'sell';
 	symbol: string;
 	shares: number;
 	priceThreshold?: number;
-	status: "open" | "executed";
+	status: 'open' | 'executed';
 }
