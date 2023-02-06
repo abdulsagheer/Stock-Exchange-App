@@ -117,3 +117,8 @@ export const deleteStock = expressAsyncHandler(
 		}
 	}
 );
+
+export const updateStockPrice = expressAsyncHandler(async () => {
+	// randomly update the stock marketCap
+	// ...
+});
