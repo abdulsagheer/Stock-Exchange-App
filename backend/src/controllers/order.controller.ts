@@ -5,7 +5,7 @@ import Api from '../utils/helper';
 import User from '../model/User.Model';
 import { updateStockPrice } from './stock.controller';
 
-// Method for creating a new stock
+// Method for creating a new Order
 export const createOrder = expressAsyncHandler(async (req: any, res: any) => {
 	try {
 		const user = await User.findOne({ _id: req.body.userId });
@@ -25,6 +25,7 @@ export const createOrder = expressAsyncHandler(async (req: any, res: any) => {
 	}
 });
 
+// Method for executing Order
 export const executeSellOrders = expressAsyncHandler(async () => {
 	try {
 		// find all sell orders with a priceThreshold less than or equal to the current stock marketCap
@@ -48,6 +49,7 @@ export const executeSellOrders = expressAsyncHandler(async () => {
 	}
 });
 
+// Method for running Exchange Task
 export const runExchangeTask = () => {
 	updateStockPrice();
 	executeSellOrders();
