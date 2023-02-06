@@ -1,17 +1,22 @@
 import { changeLoadingState } from '../loading/slice';
 import { raiseToast } from '../toast/slice';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IAuthResponse, IAuthState } from '../../types/auth.types';
 import { api } from '../../services/Apis';
-import AuthUtils from '../../utils/auth.utils';
-import { RootState } from '../store';
 
 export type IStockDetails = {
-	name: string;
-	symbol: string;
-	marketCap: number;
-	percentageDiluted: number;
-	sharesIssued: number;
+	name: string | undefined;
+	symbol: string | undefined;
+	marketCap: number | undefined;
+	percentageDiluted: number | undefined;
+	sharesIssued: number | undefined;
+};
+
+const initialState: IStockDetails = {
+	name: undefined,
+	symbol: undefined,
+	marketCap: undefined,
+	percentageDiluted: undefined,
+	sharesIssued: undefined,
 };
 
 export const SERVER_URI = process.env.SERVER_URL;
@@ -162,75 +167,11 @@ const deleteStock = createAsyncThunk(
 const stockSlice = createSlice({
 	name: 'stock',
 	initialState,
-	reducers: {
-		/**
-		 * Logout user
-		 */
-		logout: (state) => {
-			AuthUtils.removeLocalStorage('access_token');
-			AuthUtils.setAuthToken();
-
-			Object.assign(state, initialState, { access_token: null });
-		},
-
-		/**
-		 * Handle Auth Error
-		 */
-		error: (state) => {
-			AuthUtils.removeLocalStorage('access_token');
-			AuthUtils.setAuthToken();
-
-			Object.assign(state, initialState, { access_token: null });
-		},
-
-		/**
-		 * Handle Auth Request Success
-		 */
-		success: (state, { payload }: { payload: IAuthResponse }) => {
-			AuthUtils.setLocalStorage('access_token', payload.accessToken);
-			AuthUtils.setAuthToken();
-
-			state.access_token = payload.accessToken;
-			state.isAuthenticated = true;
-			state.user = payload.user;
-		},
-
-		/**
-		 * Update profile success
-		 */
-		updateProfileSuccess(
-			state,
-			{
-				payload,
-			}: { payload: { name?: string; email?: string; password?: string } }
-		) {
-			if (state.user) {
-				Object.assign(state.user, payload);
-			}
-		},
-
-		updateAuthState: (state, { payload }: { payload: Partial<IAuthState> }) => {
-			Object.assign(state, payload);
-		},
-	},
+	reducers: {},
 });
 
-const { error, logout, success, updateProfileSuccess, updateAuthState } =
-	stockSlice.actions;
+const {} = stockSlice.actions;
 
-export function getAuthState(state: RootState): IAuthState {
-	return state.auth;
-}
-
-export {
-	error,
-	loaduser,
-	login,
-	logout,
-	register,
-	success,
-	updateAuthState,
-	updateProfileSuccess,
-};
+export {};
 
 export const stockReducer = stockSlice.reducer;
