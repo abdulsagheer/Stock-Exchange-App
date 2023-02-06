@@ -16,13 +16,13 @@ stockRoute.post('/buy', authMiddleware, createOrder);
 /** Fetch stock by id */
 stockRoute.put('/sell', authMiddleware, executeSellOrders);
 
-/** Delete all stocks */
-stockRoute.delete('/:id', authMiddleware, deleteStock);
+// /** Delete all stocks */
+// stockRoute.delete('/:id', authMiddleware, deleteStock);
 
-/** Fetch all stocks */
-stockRoute.get('/', authMiddleware, getStocks);
+// /** Fetch all stocks */
+// stockRoute.get('/', authMiddleware, getStocks);
 
-/** Fetch Single User Details By ID */
-stockRoute.get('/:id', authMiddleware, getStockById);
+// /** Fetch Single User Details By ID */
+// stockRoute.get('/:id', authMiddleware, getStockById);
 
 export default stockRoute;
