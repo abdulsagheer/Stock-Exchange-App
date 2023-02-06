@@ -10,6 +10,7 @@ const orderSchema = new Schema({
 		required: true,
 		enum: ['buy', 'sell'],
 	},
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 	symbol: {
 		type: String,
 		required: true,

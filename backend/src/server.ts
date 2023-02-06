@@ -11,6 +11,7 @@ import { config } from './config/config';
 import Api, { Message } from './utils/helper';
 import userRoute from './routes/user.route';
 import stockRoute from './routes/stock.route';
+import orderRoute from './routes/stock.route';
 
 dotenv.config();
 /** DB configuration */
@@ -82,6 +83,7 @@ const StartServer = () => {
 	/** Contact Route */
 	app.use('/api/user', userRoute);
 	app.use('/api/stocks', stockRoute);
+	app.use('/api/orders', orderRoute);
 
 	/** Error handling */
 	app.use((req, res, next) => {
