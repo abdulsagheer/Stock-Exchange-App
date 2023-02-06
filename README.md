@@ -11,3 +11,5 @@
 4. `cd backend` and install the dependencies `npm install`.
  
 5. For backend .env file, send email:- abdulsagheeras29@gmail.com for the credentials.
+
+6. System Design Doc Reference Link:- 
