@@ -80,7 +80,7 @@ const StartServer = () => {
 		Api.ok(res, null, { hello: 'hello word' })
 	);
 
-	/** Contact Route */
+	/**  Routes */
 	app.use('/api/user', userRoute);
 	app.use('/api/stocks', stockRoute);
 	app.use('/api/orders', orderRoute);
