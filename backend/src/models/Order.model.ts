@@ -22,15 +22,13 @@ const orderSchema = new Schema({
 		min: 1,
 		integer: true,
 	},
-	priceThreshold: {
-		type: Number,
-		required: false,
-	},
+	price: { type: Number, required: true },
 	status: {
 		type: String,
 		required: true,
 		enum: ['open', 'executed'],
 	},
+	timestamp: { type: Date, default: Date.now },
 });
 
 export default mongoose.model<IOrder>('Order', orderSchema);

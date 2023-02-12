@@ -14,6 +14,7 @@ const stockSchema = new Schema({
 		required: true,
 		maxlength: 5,
 	},
+	price: { type: Number, required: true },
 	marketCap: {
 		type: Number,
 		required: true,

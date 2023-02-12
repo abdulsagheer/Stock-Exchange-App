@@ -1,8 +1,8 @@
-import Order from '../model/Order.model';
+import Order from '../models/Order.model';
 import expressAsyncHandler from 'express-async-handler';
-import Stock from '../model/Stock.model';
+import Stock from '../models/Stock.model';
 import Api from '../utils/helper';
-import User from '../model/User.Model';
+import User from '../models/User.Model';
 import { updateStockPrice } from './stock.controller';
 
 // Method for creating a new Order
