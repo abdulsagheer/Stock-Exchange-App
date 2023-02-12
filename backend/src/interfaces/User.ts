@@ -5,9 +5,10 @@ export interface IUser {
 	email: string;
 	password: string;
 	walletBalance: number;
-	portfolio: [ObjectId];
-	role: 'Admin' | 'Trader';
 	isAdmin: boolean;
+	role: 'Admin' | 'Trader';
+	portfolio: [ObjectId];
+	orders: [ObjectId];
 	createdAt: Date;
 	updatedAt: Date;
 }

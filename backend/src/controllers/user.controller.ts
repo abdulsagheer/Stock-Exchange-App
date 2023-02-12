@@ -4,7 +4,7 @@ import expressAsyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 
 // Importing dependencies
-import User from '../model/User.Model';
+import User from '../models/User.Model';
 import { generateToken } from '../utils/generateToken';
 import { validateMongodbID } from '../utils/validateMongodbID';
 import { Message } from './../utils/helper';
