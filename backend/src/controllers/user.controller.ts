@@ -20,11 +20,21 @@ export const userRegister = expressAsyncHandler(
 		}
 		try {
 			// Register user
-			const { name, email, password } = req.body;
-			const user = await User.create({ name, email, password });
+			const { name, email, password, role } = req.body;
+			const hashedPassword = bcrypt.hashSync(password);
+			const user = new User({
+				name,
+				email,
+				password: hashedPassword,
+				role,
+			});
+			if (role === 'Trader' || role === 'Admin') {
+				user.role = role;
+			}
+			await user.save();
 			Api.created(res, user, Message.CreateAccount);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -46,6 +56,7 @@ export const userLogin = expressAsyncHandler(
 						email: userFound?.email,
 						isAdmin: userFound?.isAdmin,
 						token: generateToken(String(userFound._id)),
+						role: userFound?.role,
 					},
 					Message.LoginSuccess
 				);
@@ -57,7 +68,7 @@ export const userLogin = expressAsyncHandler(
 				);
 			}
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -72,7 +83,7 @@ export const deleteUser = expressAsyncHandler(
 			const deletedUser = await User.findByIdAndDelete(id);
 			Api.ok(res, deletedUser, Message.Delete);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -80,14 +91,12 @@ export const deleteUser = expressAsyncHandler(
 /** Fetch All Users Details */
 export const fetchAllUsers = expressAsyncHandler(
 	async (req: Request, res: Response) => {
-		console.log(req.headers);
-
 		// Fetch all users
 		try {
 			const users = await User.find({});
 			Api.ok(res, users, Message.Fetched);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -103,7 +112,7 @@ export const fetchUserDetails = expressAsyncHandler(
 			const user = await User.findById(id);
 			Api.ok(res, user, Message.Fetched);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -119,7 +128,7 @@ export const userProfile = expressAsyncHandler(
 			const profile = await User.findById(id);
 			Api.ok(res, profile, Message.Fetched);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );

@@ -26,7 +26,7 @@ const Status = {
 export const Message = {
 	ValidationError: 'Validation error',
 	UserExist: 'User already exists',
-	CreateAccount: 'Account has beend created successfully',
+	CreateAccount: 'Account has been created successfully',
 	UserNotFound: 'User does not exist',
 	LoginSuccess: 'login successfully!',
 	Verified: 'Verification Successful!',
@@ -72,9 +72,15 @@ function statusMessage(status: number) {
 	}
 }
 
-function jsonResponse(res: Response, body: any, message: string, options: any) {
+function jsonResponse(
+	res: Response,
+	body: any,
+	message: string,
+	options: Object | any
+) {
 	options = options || {};
 	options.status = options.status || Status.OK;
+
 	let success: boolean;
 	if (options.status === Status.OK) {
 		success = true;
@@ -82,8 +88,8 @@ function jsonResponse(res: Response, body: any, message: string, options: any) {
 		success = false;
 	}
 	return res
-		.status(options.status)
-		.json({ success: success, data: body || null, message: message || '' });
+		?.status(options.status)
+		?.json({ success: success, data: body || null, message: message || '' });
 }
 
 const Api = {

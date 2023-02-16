@@ -23,15 +23,12 @@ userRoute.post('/login', userLogin);
 userRoute.get('/profile/:id', authMiddleware, userProfile);
 
 /** Delete all users */
-userRoute.delete('/:id', deleteUser);
+userRoute.delete('/:id', authMiddleware, deleteUser);
 
 /** Fetch all users */
 userRoute.get('/', authMiddleware, fetchAllUsers);
 
 /** Fetch Single User Details By ID */
 userRoute.get('/:id', fetchUserDetails);
-
-/** Fetch User Profile */
-userRoute.get('/profile/:id', authMiddleware, userProfile);
 
 export default userRoute;

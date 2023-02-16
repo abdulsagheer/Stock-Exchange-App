@@ -1,11 +1,14 @@
 import cron from 'node-cron';
+import { updateStockPrice } from '../../controllers/stock.controller';
 
 export const initialiseCron = () => {
 	/**
 	 * @description update newly order stocks
-	 *  interval every 12 hours
+	 *  interval every 15 mins
 	 */
-	cron.schedule('0 */12 * * *', (now) => {});
+	cron.schedule('*/15 * * * *', (now) => {
+		updateStockPrice;
+	});
 
 	/**
 	 * @description update order stocks

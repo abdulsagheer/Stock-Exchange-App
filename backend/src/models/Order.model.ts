@@ -16,13 +16,15 @@ const orderSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	price: {
+		type: Number,
+	},
 	shares: {
 		type: Number,
 		required: true,
 		min: 1,
 		integer: true,
 	},
-	price: { type: Number, required: true },
 	status: {
 		type: String,
 		required: true,

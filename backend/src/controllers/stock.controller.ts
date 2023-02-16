@@ -6,33 +6,35 @@ import { validateMongodbID } from '../utils/validateMongodbID';
 import { Message } from './../utils/helper';
 import Api from '../utils/helper';
 import Stock from '../models/Stock.model';
-import Order from '../models/Order.model';
-import User from '../models/User.Model';
 
 // Method for creating a new stock
 export const createStock = expressAsyncHandler(
 	async (req: Request, res: Response) => {
 		try {
 			// Destructure the request body
-			const { name, symbol, marketCap, percentageDiluted, sharesIssued } =
-				req.body;
+			const {
+				name,
+				symbol,
+				marketCap,
+				price,
+				percentageDiluted,
+				sharesIssued,
+			} = req.body;
 
 			// Create a new stock object
 			const newStock = new Stock({
 				name,
 				symbol,
+				price,
 				marketCap,
 				percentageDiluted,
 				sharesIssued,
 			});
-
-			// Save the stock to the database
-			const stock = await newStock.save();
-
+			await newStock.save();
 			// Return the created stock
-			Api.created(res, { stock }, Message.Created);
+			Api.created(res, { newStock }, 'Stock Added Successfully!!');
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -47,7 +49,7 @@ export const getStocks = expressAsyncHandler(
 			// Return the stocks
 			Api.ok(res, { stocks }, Message.Fetched);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -65,7 +67,7 @@ export const getStockById = expressAsyncHandler(
 			// Return the stock
 			Api.ok(res, { stock }, Message.Fetched);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -96,7 +98,7 @@ export const updateStock = expressAsyncHandler(
 			// Return the updated stock
 			Api.ok(res, { stock }, Message.UpdateSuccessful);
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
@@ -115,54 +117,39 @@ export const deleteStock = expressAsyncHandler(
 			// Return a success message
 			Api.ok(res, deletedStocks, 'Stock successfully deleted');
 		} catch (error: any) {
-			return Api.serverError(req, res, error, error.message);
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
 );
 
 // Function to update stock prices
-export const updateStockPrice = expressAsyncHandler(async () => {
-	// Find all stocks
-	const stocks = await Stock.find({});
+export const updateStockPrice = expressAsyncHandler(
+	async (req: Request, res: Response) => {
+		try {
+			// Find all stocks
+			const stocks = await Stock.find({});
 
-	// Loop through stocks and update price
-	for (const stock of stocks) {
-		// Generate a random number between -1 and 1
-		const random = Math.random() * 2 - 1;
+			// Loop through stocks and update price
+			stocks.forEach(async (stock) => {
+				// Get the current price of the stock
+				const currentPrice = stock.price;
 
-		// Calculate new price
-		const newPrice = stock.price * (1 + 0.05 * random);
+				// Generate a random number between -1 and 1
+				const random = Math.random() * 2 - 1;
 
-		// Update stock price
-		await Stock.findByIdAndUpdate(stock._id, { price: newPrice });
-	}
-});
+				// Calculate new price
+				const newPrice = stock.price * (1 + 0.05 * random);
 
-// Function to execute sell orders
-export const executeSellOrders = expressAsyncHandler(async () => {
-	// Find all sell orders with open status
-	const sellOrders = await Order.find({ type: 'sell', status: 'open' });
-
-	// Loop through sell orders
-	for (const sellOrder of sellOrders) {
-		// Find the corresponding stock
-		const stock = await Stock.findById(sellOrder.stock);
-
-		// If stock price is less than or equal to sell order price, execute sell order
-		if (stock.price <= sellOrder.price) {
-			// Update order status to executed
-			await Order.findByIdAndUpdate(sellOrder._id, { status: 'executed' });
-
-			// Update user wallet balance
-			const user = await User.findById(sellOrder.user);
-			await User.findByIdAndUpdate(user._id, {
-				walletBalance: user.walletBalance + sellOrder.price * sellOrder.shares,
+				// Update the stock price
+				await stock.updateOne({ price: newPrice });
+				Api.ok(
+					res,
+					stocks,
+					`Updated stock price for ${stock.symbol} from ${currentPrice} to ${newPrice}`
+				);
 			});
-
-			// Update stock shares issued
-			await Stock.findByIdAndUpdate(stock._id, {
-				sharesIssued: stock.sharesIssued - sellOrder.shares,
-			});
+		} catch (error: any) {
+			return Api.serverError(req, res, error, Message.ServerError);
 		}
 	}
-});
+);

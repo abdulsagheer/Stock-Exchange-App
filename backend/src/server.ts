@@ -3,6 +3,7 @@ import express, { Application } from 'express';
 import * as dotenv from 'dotenv';
 import http from 'http';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
 // Importing dependencies
 import dbConnect from './config/connectionDB';
@@ -11,7 +12,8 @@ import { config } from './config/config';
 import Api, { Message } from './utils/helper';
 import userRoute from './routes/user.route';
 import stockRoute from './routes/stock.route';
-import orderRoute from './routes/stock.route';
+import orderRoute from './routes/order.route';
+import { initialiseCron } from './services/cron-jobs/cron';
 
 dotenv.config();
 /** DB configuration */
@@ -19,6 +21,9 @@ dbConnect();
 
 /** Using Express Server */
 const app: Application = express();
+
+/** Cron Job */
+// initialiseCron();
 
 var whitelist = ['http://https:localhost:3000', 'http://https:localhost:5174'];
 var corsOptionsDelegate = function (req: any, callback: any) {
@@ -52,8 +57,8 @@ const StartServer = () => {
 		next();
 	});
 
-	app.use(express.urlencoded({ extended: true }));
-	app.use(express.json());
+	app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({ extended: true }));
 
 	/** Rules of our API */
 	app.use((req, res, next) => {
@@ -77,11 +82,11 @@ const StartServer = () => {
 
 	/** Health Check */
 	app.get('/ping', (req, res, next) =>
-		Api.ok(res, null, { hello: 'hello word' })
+		Api.ok(res, { hello: 'hello word' }, Message.Found)
 	);
 
 	/**  Routes */
-	app.use('/api/user', userRoute);
+	app.use('/api/users', userRoute);
 	app.use('/api/stocks', stockRoute);
 	app.use('/api/orders', orderRoute);
 

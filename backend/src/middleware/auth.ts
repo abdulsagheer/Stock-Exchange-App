@@ -1,12 +1,12 @@
 // Importing Libraries
-import { NextFunction, Response } from 'express';
+import { NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import expressAsyncHandler from 'express-async-handler';
 
 // Importing Dependencies
-import User from '../model/User.Model';
+import User from '../models/User.Model';
 import { JwtPayload } from '../interfaces/Jwt';
-import Api, { Message } from '../utils/helper';
+import Api from '../utils/helper';
 
 // Function for Authenticating Middleware on routes so that logged in user can access routes.
 export const authMiddleware = expressAsyncHandler(
@@ -14,7 +14,7 @@ export const authMiddleware = expressAsyncHandler(
 		let token: string | null;
 		if (req?.headers?.authorization?.startsWith('Bearer')) {
 			try {
-				// It split a token into two i.e, Bearer 813774r238radoshaisdhf and takes the token
+				// It split a token into two i.e, Bearer random token and takes the token
 				token = req.headers.authorization.split(' ')[1];
 				if (token) {
 					const decoded = jwt.verify(
