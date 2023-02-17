@@ -1,11 +1,14 @@
-import Order from '../models/Order.model';
+// Importing Libraries
 import expressAsyncHandler from 'express-async-handler';
+import { ObjectId } from 'mongoose';
+import { Request, Response } from 'express';
+
+// Importing dependencies
+import Order from '../models/Order.model';
 import Stock from '../models/Stock.model';
 import Api, { Message } from '../utils/helper';
 import User from '../models/User.Model';
-import { Request, Response } from 'express';
 import { IUser } from '../interfaces/User';
-import { ObjectId } from 'mongoose';
 import { PortfolioItem } from '../interfaces/Portfolio';
 
 // Method for creating a new Order
