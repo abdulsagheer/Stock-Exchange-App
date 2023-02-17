@@ -11,30 +11,39 @@ import User from '../models/User.Model';
 
 // Method for creating a new stock
 export const createStock = expressAsyncHandler(
-	async (req: Request, res: Response) => {
+	async (req: Request, res: Response): Promise<void> => {
 		try {
 			// Destructure the request body
-			const {
-				name,
-				symbol,
-				marketCap,
-				price,
-				percentageDiluted,
-				sharesIssued,
-			} = req.body;
+			const { name, symbol, marketCap, percentageDiluted, sharesIssued } =
+				req.body;
 
-			// Create a new stock object
+			// Check if stock with given symbol already exists
+			const existingStock = await Stock.findOne({ symbol });
+			if (existingStock) {
+				return Api.badRequest(
+					res,
+					Message.ValidationError,
+					'Stock symbol already exists'
+				);
+			}
+
+			// Calculate stock price based on market capitalization and percentage diluted
+			const stockPrice = (marketCap * percentageDiluted) / 100 / sharesIssued;
+
+			// Create new stock document and save to database
 			const newStock = new Stock({
 				name,
 				symbol,
-				price,
 				marketCap,
 				percentageDiluted,
 				sharesIssued,
+				price: stockPrice,
 			});
 			await newStock.save();
+			// Create a new stock object
+			await newStock.save();
 			// Return the created stock
-			Api.created(res, newStock, 'Stock Added Successfully!!');
+			Api.created(res, { newStock, stockPrice }, 'Stock Added Successfully!!');
 		} catch (error: any) {
 			console.log('Error: ', error, 'error message: ', error.message);
 			return Api.serverError(req, res, error, error.message);
@@ -85,6 +94,7 @@ export const updateStock = expressAsyncHandler(
 
 			const { name, symbol, marketCap, percentageDiluted, sharesIssued } =
 				req.body;
+			const stockPrice = (marketCap * percentageDiluted) / 100 / sharesIssued;
 
 			// Update the stock in the database
 			const stock = await Stock.findByIdAndUpdate(
@@ -95,6 +105,7 @@ export const updateStock = expressAsyncHandler(
 					marketCap,
 					percentageDiluted,
 					sharesIssued,
+					price: stockPrice,
 				},
 				{ new: true }
 			);
