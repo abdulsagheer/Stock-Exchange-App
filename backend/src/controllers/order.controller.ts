@@ -38,6 +38,7 @@ export const createOrder = expressAsyncHandler(
 					'All fields are required'
 				);
 			}
+
 			if (!Number.isInteger(shares) || shares <= 0) {
 				return Api.badRequest(
 					res,
@@ -81,10 +82,12 @@ export const createOrder = expressAsyncHandler(
 				user.portfolio.push(stockId);
 
 				await Promise.all([user.save(), order.save()]);
+
 				Api.created(res, { order }, 'Order created successfully');
 			} else if (type === 'sell') {
 				// Check that the user has enough shares of the stock to sell
 				const portfolioIndex = user?.portfolio?.indexOf(stockId);
+
 				if (portfolioIndex === undefined || portfolioIndex === -1) {
 					return Api.badRequest(
 						res,
@@ -92,9 +95,11 @@ export const createOrder = expressAsyncHandler(
 						'Stock not in portfolio'
 					);
 				}
+
 				const sharesOwned = (user?.portfolio as unknown as PortfolioItem[])[
 					portfolioIndex
 				]?.shares;
+
 				if (sharesOwned === undefined) {
 					return Api.badRequest(
 						res,
@@ -110,6 +115,7 @@ export const createOrder = expressAsyncHandler(
 						`User only owns ${sharesOwned} shares`
 					);
 				}
+
 				// Check that the selling price is greater than or equal to the current price
 				if (price < stock!.price) {
 					return Api.badRequest(
@@ -118,6 +124,7 @@ export const createOrder = expressAsyncHandler(
 						'Selling price is lower than current price'
 					);
 				}
+
 				// Create the sell order
 				const order = new Order({
 					type,
@@ -128,6 +135,7 @@ export const createOrder = expressAsyncHandler(
 					price,
 					status: 'open',
 				});
+
 				// Update the user's orders and portfolio
 				if (user) {
 					user!.orders.push(order._id as unknown as ObjectId); // cast order._id to ObjectId
@@ -138,6 +146,7 @@ export const createOrder = expressAsyncHandler(
 					// Save the updated user and order
 					await Promise.all([user?.save(), order.save()]);
 				}
+
 				Api.created(res, { order }, 'Sell order created successfully');
 			} else {
 				return Api.badRequest(
