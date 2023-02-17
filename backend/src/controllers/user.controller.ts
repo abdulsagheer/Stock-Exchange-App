@@ -28,9 +28,6 @@ export const userRegister = expressAsyncHandler(
 				password: hashedPassword,
 				role,
 			});
-			if (role === 'Trader' || role === 'Admin') {
-				user.role = role;
-			}
 			await user.save();
 			Api.created(res, user, Message.CreateAccount);
 		} catch (error: any) {
@@ -56,7 +53,6 @@ export const userLogin = expressAsyncHandler(
 						email: userFound?.email,
 						isAdmin: userFound?.isAdmin,
 						token: generateToken(String(userFound._id)),
-						role: userFound?.role,
 					},
 					Message.LoginSuccess
 				);

@@ -11,7 +11,6 @@ const userSchema = new Schema(
 		password: { type: String, required: true },
 		walletBalance: { type: Number, default: 50000000 },
 		isAdmin: { type: Boolean, default: false, required: true },
-		role: { type: String, enum: ['Admin', 'Trader'] },
 		portfolio: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
 		orders: [
 			{ type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
