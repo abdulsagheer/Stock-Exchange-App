@@ -28,7 +28,7 @@ export const isAdmin = expressAsyncHandler(
 				// find the user by ID
 				const user = await User.findById(decoded?.id).select('-password');
 				req.user = user as JwtPayload;
-				if (req.user.role !== 'admin') {
+				if (!req.user.isAdmin) {
 					return Api.unauthorized(req, res, 'Not authorized as admin');
 				}
 				next();

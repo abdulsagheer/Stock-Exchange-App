@@ -3,7 +3,6 @@ import expressAsyncHandler from 'express-async-handler';
 import Stock from '../models/Stock.model';
 import Api, { Message } from '../utils/helper';
 import User from '../models/User.Model';
-import { updateStockPrice } from './stock.controller';
 import { Request, Response } from 'express';
 
 // Method for creating a new Order
@@ -105,15 +104,5 @@ export const createOrder = expressAsyncHandler(
 		} catch (error: any) {
 			return Api.serverError(req, res, error, 'Error processing order');
 		}
-	}
-);
-
-// Method for running Exchange Task
-export const runExchangeTask = expressAsyncHandler(
-	async (req: any, res: any, next: any) => {
-		// Function to run the task every 15 minutes
-		setInterval(async () => {
-			await updateStockPrice(req, res, next);
-		}, 15 * 60 * 1000); // 15 minutes in milliseconds
 	}
 );

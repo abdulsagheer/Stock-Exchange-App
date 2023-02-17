@@ -22,7 +22,6 @@ const orderSchema = new Schema({
 	shares: {
 		type: Number,
 		required: true,
-		min: 1,
 		integer: true,
 	},
 	status: {
