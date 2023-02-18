@@ -3,7 +3,6 @@ import express, { Application } from 'express';
 import * as dotenv from 'dotenv';
 import http from 'http';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 
 // Importing dependencies
 import dbConnect from './config/connectionDB';
@@ -57,8 +56,8 @@ const StartServer = () => {
 		next();
 	});
 
-	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(express.urlencoded({ extended: true }));
+	app.use(express.json());
 
 	/** Rules of our API */
 	app.use((req, res, next) => {

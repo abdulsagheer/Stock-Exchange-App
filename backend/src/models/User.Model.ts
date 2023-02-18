@@ -12,9 +12,7 @@ const userSchema = new Schema(
 		walletBalance: { type: Number, default: 50000000 },
 		isAdmin: { type: Boolean, default: false, required: true },
 		portfolio: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
-		orders: [
-			{ type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
-		],
+		orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
 	},
 	{
 		timestamps: true,

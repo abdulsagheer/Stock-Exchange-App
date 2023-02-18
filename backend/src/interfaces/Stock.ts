@@ -1,8 +1,10 @@
-export interface IStock {
+import { Document } from 'mongoose';
+
+export interface IStock extends Document {
 	name: string;
 	symbol: string;
-	marketCap: number;
 	price: number;
+	marketCap: number;
 	percentageDiluted: number;
 	sharesIssued: number;
 }

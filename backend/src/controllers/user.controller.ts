@@ -105,7 +105,9 @@ export const fetchUserDetails = expressAsyncHandler(
 		validateMongodbID(req, res, id);
 
 		try {
-			const user = await User.findById(id);
+			const user = await User.findById(id)
+				.populate('portfolio')
+				.populate('name');
 			Api.ok(res, user, Message.Fetched);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, Message.ServerError);
@@ -121,7 +123,9 @@ export const userProfile = expressAsyncHandler(
 		validateMongodbID(req, res, id);
 
 		try {
-			const profile = await User.findById(id);
+			const profile = await User.findById(id)
+				.populate('portfolio')
+				.populate('name');
 			Api.ok(res, profile, Message.Fetched);
 		} catch (error: any) {
 			return Api.serverError(req, res, error, Message.ServerError);

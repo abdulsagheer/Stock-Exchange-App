@@ -1,6 +1,5 @@
 // Importing Libraries
 import expressAsyncHandler from 'express-async-handler';
-import { ObjectId } from 'mongoose';
 import { Request, Response } from 'express';
 
 // Importing dependencies
@@ -9,7 +8,7 @@ import Stock from '../models/Stock.model';
 import Api, { Message } from '../utils/helper';
 import User from '../models/User.Model';
 import { IUser } from '../interfaces/User';
-import { PortfolioItem } from '../interfaces/Portfolio';
+import { ObjectId, Types } from 'mongoose';
 
 // Method for creating a new Order
 export const createOrder = expressAsyncHandler(
@@ -24,7 +23,7 @@ export const createOrder = expressAsyncHandler(
 			}: {
 				type: string;
 				userId: string;
-				stockId: ObjectId;
+				stockId: string;
 				shares: number;
 				price: number;
 			} = req.body;
@@ -91,6 +90,15 @@ export const createOrder = expressAsyncHandler(
 				// Check that the user has enough shares of the stock to sell
 				const portfolioIndex = user?.portfolio?.indexOf(stockId);
 
+				if (typeof user === 'object' && typeof stock === 'object') {
+					console.log(
+						'hey',
+						user?.portfolio.find((s: any) => s._id.equals(stock?._id)),
+						portfolioIndex,
+						stockId
+					);
+				}
+
 				if (portfolioIndex === undefined || portfolioIndex === -1) {
 					return Api.badRequest(
 						res,
@@ -99,9 +107,7 @@ export const createOrder = expressAsyncHandler(
 					);
 				}
 
-				const sharesOwned = (user?.portfolio as unknown as PortfolioItem[])[
-					portfolioIndex
-				]?.shares;
+				const sharesOwned = (user?.portfolio as any)[portfolioIndex]?.shares;
 
 				if (sharesOwned === undefined) {
 					return Api.badRequest(
@@ -132,7 +138,7 @@ export const createOrder = expressAsyncHandler(
 				const order = new Order({
 					type,
 					user: userId,
-					stock: stockId as ObjectId, // cast stockId to ObjectId
+					stock: stockId,
 					symbol: stock?.symbol,
 					shares,
 					price,
@@ -141,10 +147,8 @@ export const createOrder = expressAsyncHandler(
 
 				// Update the user's orders and portfolio
 				if (user) {
-					user!.orders.push(order._id as unknown as ObjectId); // cast order._id to ObjectId
-					(user!.portfolio as unknown as PortfolioItem[])[
-						portfolioIndex
-					].shares -= shares;
+					user!.orders.push(order._id as any); // cast order._id to ObjectId
+					(user!.portfolio as any)[portfolioIndex].shares -= shares;
 					user!.walletBalance += shares * price;
 					// Save the updated user and order
 					await Promise.all([user?.save(), order.save()]);
