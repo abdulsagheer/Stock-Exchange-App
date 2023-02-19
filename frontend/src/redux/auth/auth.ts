@@ -155,7 +155,7 @@ const authSlice = createSlice({
 		success: (state, { payload }: { payload: IAuthResponse }) => {
 			AuthUtils.setLocalStorage('access_token', payload.accessToken);
 			AuthUtils.setAuthToken();
- 
+
 			state.access_token = payload.accessToken;
 			state.isAuthenticated = true;
 			state.user = payload.user;
