@@ -10,6 +10,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import Marketplace from './pages/Marketplace/Marketplace';
 import Order from './pages/Order/Order';
 import Stock from './pages/Stock/Stock';
+import Portfolio from './pages/Portfolio/Portfolio';
 
 const links = [
 	{
@@ -27,6 +28,10 @@ const links = [
 	{
 		title: 'Orders',
 		path: '/orders',
+	},
+	{
+		title: 'Portfolio',
+		path: '/portfolio',
 	},
 	{
 		title: 'Sign Up',
@@ -49,6 +54,7 @@ function App() {
 				<Route path="/stock" element={<Stock />} />
 				<Route path="/marketplace" element={<Marketplace />} />
 				<Route path="/orders" element={<Order />} />
+				<Route path="/portfolio" element={<Portfolio />} />
 			</Routes>
 		</div>
 	);
