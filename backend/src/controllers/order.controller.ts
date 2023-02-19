@@ -8,7 +8,7 @@ import Stock from '../models/Stock.model';
 import Api, { Message } from '../utils/helper';
 import User from '../models/User.Model';
 import { IUser } from '../interfaces/User';
-import { ObjectId, Types } from 'mongoose';
+import { ObjectId } from 'mongoose';
 
 // Method for creating a new Order
 export const createOrder = expressAsyncHandler(
@@ -22,8 +22,8 @@ export const createOrder = expressAsyncHandler(
 				price,
 			}: {
 				type: string;
-				userId: string;
-				stockId: string;
+				userId: ObjectId;
+				stockId: ObjectId;
 				shares: number;
 				price: number;
 			} = req.body;

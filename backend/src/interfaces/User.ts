@@ -1,5 +1,5 @@
 // Importing Libraries
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 export interface IUser extends Document {
 	save(): any;
@@ -10,6 +10,6 @@ export interface IUser extends Document {
 	password: string;
 	walletBalance: number;
 	isAdmin: boolean;
-	portfolio: string[];
-	orders: string[];
+	portfolio: ObjectId[];
+	orders: ObjectId[];
 }

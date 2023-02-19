@@ -1,10 +1,10 @@
 // Importing Libraries
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
 export interface IOrder extends Document {
 	type: 'buy' | 'sell';
-	user: string;
-	stock: string;
+	user: ObjectId;
+	stock: ObjectId;
 	symbol: string;
 	price?: number;
 	shares: number;
