@@ -48,8 +48,9 @@ const StockCard: React.FC<Props> = ({ symbol, name, price, onBuy, onSell }) => {
 			<div className="stock-info">
 				<div className="symbol">{symbol}</div>
 				<div className="name">{name}</div>
-				<div className="price">{price}</div>
+				<div className="price">${price}</div>
 			</div>
+			<div className="divider"></div>
 			<div className="stock-action">
 				<div className="action">
 					<select value={action} onChange={handleActionChange}>
