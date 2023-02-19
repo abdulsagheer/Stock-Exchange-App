@@ -8,6 +8,7 @@ import {
 	Tooltip,
 	Legend,
 } from 'recharts';
+import './Home.scss';
 
 function Home() {
 	const [data, setData] = useState([
@@ -30,8 +31,8 @@ function Home() {
 	}, []);
 
 	return (
-		<div className='home'>
-			<h1 className='header'>Stock Exchange System</h1>
+		<div className="home">
+			<h1 className="header">Stock Exchange System</h1>
 			<LineChart
 				width={1000}
 				height={500}

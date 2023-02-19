@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidebar.scss';
+import { FaWallet } from 'react-icons/fa';
 
 interface Props {
 	links: { path: string; title: string }[];
@@ -28,7 +29,9 @@ const Sidebar: React.FC<Props> = ({ links }) => {
 					</li>
 				))}
 			</ul>
-			<p>Wallet Balance: $500000</p>
+			<p>
+				<FaWallet />: $500000
+			</p>
 		</div>
 	);
 };

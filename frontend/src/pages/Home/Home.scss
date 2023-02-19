@@ -1,5 +1,10 @@
 .home {
 	.header {
-		padding-left: 100px;
-	}
+		text-align: center;
+		transform: translate(-30px, -160px);
+		-webkit-transform: translate(-30px, -160px);
+		-moz-transform: translate(-30px, -160px);
+		-ms-transform: translate(-30px, -160px);
+		-o-transform: translate(-30px, -160px);
+}
 }

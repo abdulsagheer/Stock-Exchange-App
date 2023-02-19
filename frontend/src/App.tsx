@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn/SignIn';
 import Sidebar from './components/Sidebar/Sidebar';
 import Marketplace from './pages/Marketplace/Marketplace';
 import Order from './pages/Order/Order';
+import Stock from './pages/Stock/Stock';
 
 const links = [
 	{
@@ -45,6 +46,7 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="/signup" element={<SignUp />} />
 				<Route path="/login" element={<SignIn />} />
+				<Route path="/stock" element={<Stock />} />
 				<Route path="/marketplace" element={<Marketplace />} />
 				<Route path="/orders" element={<Order />} />
 			</Routes>
