@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	LineChart,
 	Line,
@@ -10,49 +10,50 @@ import {
 } from 'recharts';
 import './Home.scss';
 
-function Home() {
-	const [data, setData] = useState([
-		{ name: '10:00', price: 50 },
-		{ name: '10:05', price: 55 },
-		{ name: '10:10', price: 60 },
-		{ name: '10:15', price: 65 },
-		{ name: '10:20', price: 70 },
-	]);
+interface StockData {
+	time: number;
+	price: number;
+}
+
+const Home: React.FC = () => {
+	const [data, setData] = useState<StockData[]>([]);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setData((prevState) => [
-				...prevState.slice(-5),
-				{ name: new Date().toLocaleTimeString(), price: Math.random() * 100 },
-			]);
-		}, 5000);
+		const intervalId = setInterval(() => {
+			// Generate a random price between 100 and 200
+			const price = Math.random() * 100 + 100;
 
-		return () => clearInterval(interval);
+			// Add a new data point with the current time and price
+			setData((prevData) => [...prevData, { time: Date.now(), price }]);
+
+			// Remove the oldest data point if we have more than 50
+			if (data.length > 50) {
+				setData((prevData) => prevData.slice(1));
+			}
+		}, 6000);
+
+		return () => clearInterval(intervalId);
 	}, []);
 
 	return (
 		<div className="home">
 			<h1 className="header">Stock Exchange System</h1>
-			<LineChart
-				width={1000}
-				height={500}
-				data={data}
-				margin={{ top: 5, right: 50, left: 20, bottom: 5 }}
-			>
-				<XAxis dataKey="name" />
-				<YAxis />
-				<CartesianGrid strokeDasharray="3 3" />
-				<Tooltip />
-				<Legend />
-				<Line
-					type="monotone"
-					dataKey="price"
-					stroke="#8884d8"
-					activeDot={{ r: 8 }}
+
+			<LineChart width={1400} height={500} data={data}>
+				<XAxis
+					dataKey="time"
+					type="number"
+					domain={['dataMin', 'dataMax']}
+					tickFormatter={(time) => new Date(time).toLocaleTimeString()}
 				/>
+				<YAxis dataKey="price" type="number" domain={['dataMin', 'dataMax']} />
+				<CartesianGrid strokeDasharray="3 3" />
+				<Tooltip labelFormatter={(time) => new Date(time).toLocaleString()} />
+				<Legend />
+				<Line type="monotone" dataKey="price" stroke="#8884d8" />
 			</LineChart>
 		</div>
 	);
-}
+};
 
 export default Home;
