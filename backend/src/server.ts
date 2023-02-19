@@ -24,7 +24,7 @@ const app: Application = express();
 /** Cron Job */
 // initialiseCron();
 
-var whitelist = ['http://https:localhost:3000', 'http://https:localhost:5174'];
+var whitelist = ['http://https:localhost:3000', 'http://https:localhost:5173'];
 var corsOptionsDelegate = function (req: any, callback: any) {
 	var corsOptions;
 	if (whitelist.indexOf(req.header('Origin')) !== -1) {

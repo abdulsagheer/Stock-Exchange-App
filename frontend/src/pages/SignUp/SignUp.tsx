@@ -1,8 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/hook';
+import { register } from '../../redux/auth/auth';
+import { changeLoadingState } from '../../redux/loading/slice';
+import { raiseToast } from '../../redux/toast/slice';
 import './SignUp.scss';
 
 const SignUp = () => {
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+
 	const [state, setState] = useState({
 		name: '',
 		email: '',
@@ -16,6 +23,19 @@ const SignUp = () => {
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
+		try {
+			dispatch(changeLoadingState(true));
+			dispatch(register(state));
+			dispatch(changeLoadingState(false));
+			navigate('/login');
+		} catch (error: any) {
+			dispatch(
+				raiseToast({
+					type: 'error',
+					message: error.message,
+				})
+			);
+		}
 		console.log('Submitted!', state);
 	};
 

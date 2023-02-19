@@ -19,7 +19,7 @@ const initialState: IStockDetails = {
 	sharesIssued: undefined,
 };
 
-export const SERVER_URI = import.meta.env.BASE_URL;
+export const SERVER_URI = import.meta.env.VITE_SERVER_URL;
 
 /**
  * @description - To create stock

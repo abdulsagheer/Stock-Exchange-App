@@ -6,18 +6,18 @@ import { api } from '../../services/Apis';
 import AuthUtils from '../../utils/auth.utils';
 import { RootState } from '../store';
 
-export type ISignupDetails = {
+export type ISigninDetails = {
 	email: string;
 	password: string;
 };
 
-export type ISigninDetails = {
+export type ISignupDetails = {
 	email: string;
 	name: string;
 	password: string;
 };
 
-export const SERVER_URI = import.meta.env.BASE_URL;
+export const SERVER_URI = import.meta.env.VITE_SERVER_URL;
 
 const initialState: IAuthState = {
 	access_token: AuthUtils.getLocalStorage('access_token'),
@@ -68,7 +68,7 @@ const login = createAsyncThunk(
 			dispatch(changeLoadingState(true));
 
 			const data = await api.user.login(details, {
-				'Access-Control-Allow-Origin': 'http://localhost:3000/',
+				'Access-Control-Allow-Origin': 'http://localhost:5173/',
 			});
 
 			if (!data || !data?.accessToken) {
@@ -155,7 +155,7 @@ const authSlice = createSlice({
 		success: (state, { payload }: { payload: IAuthResponse }) => {
 			AuthUtils.setLocalStorage('access_token', payload.accessToken);
 			AuthUtils.setAuthToken();
-
+ 
 			state.access_token = payload.accessToken;
 			state.isAuthenticated = true;
 			state.user = payload.user;
