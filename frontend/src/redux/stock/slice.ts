@@ -19,7 +19,7 @@ const initialState: IStockDetails = {
 	sharesIssued: undefined,
 };
 
-export const SERVER_URI = process.env.SERVER_URL;
+export const SERVER_URI = import.meta.env.BASE_URL;
 
 /**
  * @description - To create stock

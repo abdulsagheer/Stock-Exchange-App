@@ -1,6 +1,6 @@
 import { AxiosRequest } from './ApiCall';
 
-const baseUrl = process.env.BASE_URL as string;
+const baseUrl = import.meta.env.BASE_URL as string;
 
 export const api = {
 	user: {

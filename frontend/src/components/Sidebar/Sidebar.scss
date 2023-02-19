@@ -1,0 +1,42 @@
+.sidebar {
+	position: fixed;
+	top: 0;
+	left: -200px;
+	width: 200px;
+	height: 100vh;
+	background-color: #f1f1f1;
+	transition: left 0.3s;
+	&.open {
+		left: 0;
+	}
+	&.closed {
+		left: -180px;
+	}
+	.toggle-btn {
+		display: block;
+		width: 100%;
+		padding: 10px;
+		border: none;
+		background-color: #ccc;
+		cursor: pointer;
+		&:hover {
+			background-color: #ddd;
+		}
+	}
+	.links {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		li {
+			a {
+				display: block;
+				padding: 10px;
+				text-decoration: none;
+				color: #333;
+				&:hover {
+					background-color: #ddd;
+				}
+			}
+		}
+	}
+}

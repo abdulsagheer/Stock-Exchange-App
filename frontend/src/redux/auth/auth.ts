@@ -17,7 +17,7 @@ export type ISigninDetails = {
 	password: string;
 };
 
-export const SERVER_URI = process.env.SERVER_URL;
+export const SERVER_URI = import.meta.env.BASE_URL;
 
 const initialState: IAuthState = {
 	access_token: AuthUtils.getLocalStorage('access_token'),
