@@ -11,6 +11,8 @@ import Marketplace from './pages/Marketplace/Marketplace';
 import Order from './pages/Order/Order';
 import Stock from './pages/Stock/Stock';
 import Portfolio from './pages/Portfolio/Portfolio';
+import { StockCreate } from './pages/StockCreate/StockCreate';
+import { StockUpdate } from './pages/StockUpdate/StockUpdate';
 
 const links = [
 	{
@@ -41,6 +43,14 @@ const links = [
 		title: 'Login',
 		path: '/login',
 	},
+	{
+		title: 'Stock Create',
+		path: '/stockcreate',
+	},
+	{
+		title: 'Stock Update',
+		path: '/stockupdate',
+	},
 ];
 
 function App() {
@@ -55,6 +65,8 @@ function App() {
 				<Route path="/marketplace" element={<Marketplace />} />
 				<Route path="/orders" element={<Order />} />
 				<Route path="/portfolio" element={<Portfolio />} />
+				<Route path="/stockcreate" element={<StockCreate />} />
+				<Route path="/stockupdate" element={<StockUpdate />} />
 			</Routes>
 		</div>
 	);
