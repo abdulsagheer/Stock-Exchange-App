@@ -2,6 +2,7 @@ import { changeLoadingState } from '../loading/slice';
 import { raiseToast } from '../toast/slice';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api } from '../../services/Apis';
+import { success } from '../auth/auth';
 
 export type IStockDetails = {
 	name: string | undefined;
@@ -83,11 +84,11 @@ const getStocks = createAsyncThunk(
  */
 const getStockById = createAsyncThunk(
 	'stock/stockById',
-	async (details: IStockDetails, { dispatch }) => {
+	async (id: any, { dispatch }) => {
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.getStockById(details);
+			const data = await api.stocks.getStockById(id);
 
 			dispatch(success(data));
 
@@ -111,11 +112,11 @@ const getStockById = createAsyncThunk(
  */
 const updateStock = createAsyncThunk(
 	'stock/updateStock',
-	async (details: IStockDetails, { dispatch }) => {
+	async (id: any, { dispatch }) => {
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.updateStock(details);
+			const data = await api.stocks.updateStock(id);
 
 			dispatch(success(data));
 
@@ -140,11 +141,11 @@ const updateStock = createAsyncThunk(
  */
 const deleteStock = createAsyncThunk(
 	'stock/deleteStock',
-	async (details: IStockDetails, { dispatch }) => {
+	async (id: any, { dispatch }) => {
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.deleteStock(details);
+			const data = await api.stocks.deleteStock(id);
 
 			dispatch(success(data));
 
