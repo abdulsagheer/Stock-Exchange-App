@@ -30,7 +30,7 @@ const createStock = createAsyncThunk(
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.createStock();
+			const data = await api.stocks.createStock(details);
 			dispatch(success(data));
 
 			dispatch(changeLoadingState(false));
@@ -87,7 +87,7 @@ const getStockById = createAsyncThunk(
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.getStockById();
+			const data = await api.stocks.getStockById(details);
 
 			dispatch(success(data));
 
@@ -115,7 +115,7 @@ const updateStock = createAsyncThunk(
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.updateStock();
+			const data = await api.stocks.updateStock(details);
 
 			dispatch(success(data));
 
@@ -144,7 +144,7 @@ const deleteStock = createAsyncThunk(
 		try {
 			dispatch(changeLoadingState(true));
 
-			const data = await api.stocks.deleteStock();
+			const data = await api.stocks.deleteStock(details);
 
 			dispatch(success(data));
 
